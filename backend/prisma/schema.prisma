@@ -1,0 +1,233 @@
+// =============================================================================
+// University Attendance System - Prisma Schema Specification
+// File: backend/prisma/schema.prisma
+// Matches DDL in database/schema/02_tables.sql & 03_indexes.sql exactly.
+// =============================================================================
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  ADMIN
+  STUDENT
+  TEACHER
+}
+
+enum AccountState {
+  PendingActivation
+  Active
+  Suspended
+  Deactivated
+}
+
+enum DeviceState {
+  Unregistered
+  PendingVerification
+  Bound
+  Revoked
+}
+
+enum CodeState {
+  Generated
+  Sent
+  Used
+  Expired
+  Invalidated
+}
+
+enum SemesterType {
+  FIRST
+  SECOND
+  SUMMER
+}
+
+enum SectionType {
+  PRACTICAL
+  THEORETICAL
+}
+
+enum TeacherType {
+  PRACTICAL_TEACHER
+  THEORETICAL_TEACHER
+  BOTH
+}
+
+model User {
+  id            String       @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  username      String       @unique @db.VarChar(50)
+  email         String       @unique @db.VarChar(100)
+  password_hash String       @db.VarChar(255)
+  full_name     String       @db.VarChar(150)
+  phone_number  String?      @db.VarChar(20)
+  role          Role
+  account_state AccountState @default(PendingActivation)
+  created_at    DateTime     @default(now()) @db.Timestamptz
+  updated_at    DateTime     @default(now()) @updatedAt @db.Timestamptz
+
+  devices          Device[]
+  activation_codes ActivationCode[]
+  student          Student?
+  teacher          Teacher?
+  delegates        Delegate[]       @relation("AssignedDelegates")
+
+  @@map("users")
+}
+
+model Student {
+  id               String       @id @db.Uuid
+  student_number   String       @unique @db.VarChar(30)
+  department_id    String       @db.Uuid
+  academic_year_id String       @db.Uuid
+  created_at       DateTime     @default(now()) @db.Timestamptz
+
+  user          User         @relation(fields: [id], references: [id], onDelete: Cascade)
+  department    Department   @relation(fields: [department_id], references: [id], onDelete: Restrict)
+  academic_year AcademicYear @relation(fields: [academic_year_id], references: [id], onDelete: Restrict)
+  enrollments   Enrollment[]
+  delegates     Delegate[]
+
+  @@map("students")
+}
+
+model Teacher {
+  id              String      @id @db.Uuid
+  employee_number String      @unique @db.VarChar(30)
+  teacher_type    TeacherType
+  department_id   String      @db.Uuid
+  created_at      DateTime    @default(now()) @db.Timestamptz
+
+  user       User       @relation(fields: [id], references: [id], onDelete: Cascade)
+  department Department @relation(fields: [department_id], references: [id], onDelete: Restrict)
+  sections   Section[]
+
+  @@map("teachers")
+}
+
+model Delegate {
+  id          String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  student_id  String   @db.Uuid
+  section_id  String   @db.Uuid
+  is_active   Boolean  @default(true)
+  assigned_by String   @db.Uuid
+  created_at  DateTime @default(now()) @db.Timestamptz
+
+  student  Student @relation(fields: [student_id], references: [id], onDelete: Cascade)
+  section  Section @relation(fields: [section_id], references: [id], onDelete: Cascade)
+  assigner User    @relation("AssignedDelegates", fields: [assigned_by], references: [id], onDelete: Restrict)
+
+  @@map("delegates")
+}
+
+model Device {
+  id                 String      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  user_id            String      @db.Uuid
+  device_identifier  String      @unique @db.VarChar(255)
+  device_fingerprint String      @db.Text
+  device_state       DeviceState @default(Unregistered)
+  bound_at           DateTime?   @db.Timestamptz
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("devices")
+}
+
+model ActivationCode {
+  id         String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  user_id    String    @db.Uuid
+  code       String    @db.VarChar(50)
+  code_state CodeState @default(Generated)
+  expires_at DateTime  @db.Timestamptz
+  used_at    DateTime? @db.Timestamptz
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("activation_codes")
+}
+
+model Department {
+  id         String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  code       String   @unique @db.VarChar(20)
+  name       String   @db.VarChar(150)
+  is_active  Boolean  @default(true)
+  created_at DateTime @default(now()) @db.Timestamptz
+
+  courses  Course[]
+  students Student[]
+  teachers Teacher[]
+
+  @@map("departments")
+}
+
+model AcademicYear {
+  id         String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  year_name  String   @unique @db.VarChar(50)
+  start_date DateTime @db.Date
+  end_date   DateTime @db.Date
+  is_current Boolean  @default(false)
+
+  semesters Semester[]
+  students  Student[]
+
+  @@map("academic_years")
+}
+
+model Semester {
+  id               String       @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  academic_year_id String       @db.Uuid
+  semester_type    SemesterType
+  is_active        Boolean      @default(false)
+
+  academic_year AcademicYear @relation(fields: [academic_year_id], references: [id], onDelete: Cascade)
+  sections      Section[]
+
+  @@map("semesters")
+}
+
+model Course {
+  id            String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  course_code   String   @unique @db.VarChar(30)
+  title         String   @db.VarChar(150)
+  department_id String   @db.Uuid
+  credit_hours  Int
+
+  department Department @relation(fields: [department_id], references: [id], onDelete: Restrict)
+  sections   Section[]
+
+  @@map("courses")
+}
+
+model Section {
+  id             String      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  course_id      String      @db.Uuid
+  semester_id    String      @db.Uuid
+  teacher_id     String      @db.Uuid
+  section_type   SectionType
+  section_number String      @db.VarChar(10)
+
+  course      Course       @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  semester    Semester     @relation(fields: [semester_id], references: [id], onDelete: Cascade)
+  teacher     Teacher      @relation(fields: [teacher_id], references: [id], onDelete: Restrict)
+  enrollments Enrollment[]
+  delegates   Delegate[]
+
+  @@map("sections")
+}
+
+model Enrollment {
+  id          String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  student_id  String   @db.Uuid
+  section_id  String   @db.Uuid
+  enrolled_at DateTime @default(now()) @db.Timestamptz
+
+  student Student @relation(fields: [student_id], references: [id], onDelete: Cascade)
+  section Section @relation(fields: [section_id], references: [id], onDelete: Cascade)
+
+  @@unique([student_id, section_id], map: "uq_student_section")
+  @@map("enrollments")
+}
