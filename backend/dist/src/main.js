@@ -37,8 +37,16 @@ async function bootstrap() {
         allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'X-Device-Id'],
         credentials: true,
     });
+    const httpAdapter = app.getHttpAdapter();
+    httpAdapter.get('/', (req, res) => {
+        res.redirect('/api/v1/docs');
+    });
+    httpAdapter.get('/favicon.ico', (req, res) => {
+        res.status(204).end();
+    });
     await app.listen(port);
     logger.log(`Server is running on: http://localhost:${port}/api/v1`);
+    logger.log(`Interactive API Documentation: http://localhost:${port}/api/v1/docs`);
 }
 bootstrap();
 //# sourceMappingURL=main.js.map

@@ -55,8 +55,18 @@ async function bootstrap() {
     credentials: true,
   });
 
+  // Root redirect and favicon handler
+  const httpAdapter = app.getHttpAdapter();
+  httpAdapter.get('/', (req: any, res: any) => {
+    res.redirect('/api/v1/docs');
+  });
+  httpAdapter.get('/favicon.ico', (req: any, res: any) => {
+    res.status(204).end();
+  });
+
   await app.listen(port);
   logger.log(`Server is running on: http://localhost:${port}/api/v1`);
+  logger.log(`Interactive API Documentation: http://localhost:${port}/api/v1/docs`);
 }
 
 bootstrap();

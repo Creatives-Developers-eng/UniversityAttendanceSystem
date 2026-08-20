@@ -1,8 +1,13 @@
 {
   "name": "university-attendance-system-root",
   "version": "1.0.0",
-  "description": "University Attendance System Root Workspace",
+  "description": "University Attendance System Central Workspace",
+  "author": "Qahtan Alshagea",
+  "license": "UNLICENSED",
   "private": true,
+  "workspaces": [
+    "backend"
+  ],
   "scripts": {
     "start": "npm --prefix backend run start",
     "start:dev": "npm --prefix backend run start:dev",
