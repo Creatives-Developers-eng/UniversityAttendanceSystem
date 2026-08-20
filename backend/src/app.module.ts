@@ -9,6 +9,7 @@ import { DevicesModule } from './devices/devices.module';
 import { AcademicModule } from './academic/academic.module';
 import { SessionsModule } from './sessions/sessions.module';
 import { AttendanceModule } from './attendance/attendance.module';
+import { BiometricsModule } from './students/biometrics/biometrics.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { AttendanceModule } from './attendance/attendance.module';
     AcademicModule,
     SessionsModule,
     AttendanceModule,
+    BiometricsModule,
   ],
   controllers: [AppController],
   providers: [],
