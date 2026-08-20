@@ -37,8 +37,23 @@ async function bootstrap() {
     new TransformInterceptor(),
   );
 
-  // Enable CORS for Flutter Web Admin and Local Clients
-  app.enableCors();
+  // Security Headers Middleware
+  app.use((req: any, res: any, next: any) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    next();
+  });
+
+  // Enable Secure CORS for Flutter Web Admin, Mobile & Local Embedded Clients
+  app.enableCors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'X-Device-Id'],
+    credentials: true,
+  });
 
   await app.listen(port);
   logger.log(`Server is running on: http://localhost:${port}/api/v1`);
