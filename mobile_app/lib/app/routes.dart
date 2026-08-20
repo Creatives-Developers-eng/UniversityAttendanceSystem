@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../authentication/activation_view.dart';
 import '../shared/tokens/tokens.dart';
 
 /// المسارات الرسمية ونظام التوجيه لتطبيق الحضور الجامعي الذكي
@@ -46,11 +47,7 @@ class AppRoutes {
 
       case deviceActivation:
         return _buildRoute(
-          const _PlaceholderScreen(
-            title: 'تفعيل وتوثيق الجهاز',
-            subtitle: 'أدخل رمز التفعيل الممنوح من إدارة الكلية',
-            icon: Icons.phonelink_lock_rounded,
-          ),
+          const ActivationView(),
           routeSettings,
         );
 
