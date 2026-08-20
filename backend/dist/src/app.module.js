@@ -22,6 +22,7 @@ const biometrics_module_1 = require("./students/biometrics/biometrics.module");
 const audit_module_1 = require("./audit/audit.module");
 const reports_module_1 = require("./reports/reports.module");
 const justifications_module_1 = require("./justifications/justifications.module");
+const docs_module_1 = require("./docs/docs.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -43,6 +44,7 @@ exports.AppModule = AppModule = __decorate([
             audit_module_1.AuditModule,
             reports_module_1.ReportsModule,
             justifications_module_1.JustificationsModule,
+            docs_module_1.DocsModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [],

@@ -13,6 +13,7 @@ import { BiometricsModule } from './students/biometrics/biometrics.module';
 import { AuditModule } from './audit/audit.module';
 import { ReportsModule } from './reports/reports.module';
 import { JustificationsModule } from './justifications/justifications.module';
+import { DocsModule } from './docs/docs.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { JustificationsModule } from './justifications/justifications.module';
     AuditModule,
     ReportsModule,
     JustificationsModule,
+    DocsModule,
   ],
   controllers: [AppController],
   providers: [],
