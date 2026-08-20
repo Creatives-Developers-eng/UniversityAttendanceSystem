@@ -18,6 +18,10 @@ export class BiometricsService {
     private readonly cryptoService: BiometricsCryptoService,
   ) {}
 
+  private get db(): any {
+    return this.prisma;
+  }
+
   async enrollTemplate(
     studentId: string,
     dto: EnrollBiometricDto,
@@ -26,7 +30,7 @@ export class BiometricsService {
     const { template_hash, encrypted_template_data } = dto;
 
     // 1. Verify student exists
-    const student = await this.prisma.student.findUnique({
+    const student = await this.db.student.findUnique({
       where: { id: studentId },
       include: { user: true },
     });
@@ -50,7 +54,7 @@ export class BiometricsService {
     }
 
     // 4. Upsert template in database (Zero Raw Image Storage: Embeddings Only)
-    const template = await this.prisma.biometricTemplate.upsert({
+    const template = await this.db.biometricTemplate.upsert({
       where: { student_id: studentId },
       update: {
         template_hash,
@@ -66,7 +70,7 @@ export class BiometricsService {
 
     // 5. Record Audit Log
     try {
-      await this.prisma.auditLog.create({
+      await this.db.auditLog.create({
         data: {
           user_id: user.id || user.sub,
           action: 'BIOMETRIC_TEMPLATE_ENROLL',
@@ -79,7 +83,7 @@ export class BiometricsService {
           }),
         },
       });
-    } catch (err) {
+    } catch (err: any) {
       this.logger.warn(`Failed to write audit log: ${err.message}`);
     }
 
@@ -97,7 +101,7 @@ export class BiometricsService {
 
   async getSectionBiometrics(sectionId: string, user: any) {
     // 1. Verify section exists
-    const section = await this.prisma.section.findUnique({
+    const section = await this.db.section.findUnique({
       where: { id: sectionId },
       include: {
         teacher: true,
@@ -113,7 +117,7 @@ export class BiometricsService {
     if (user.role !== Role.ADMIN) {
       const isTeacher = section.teacher_id === user.id;
       const isDelegate = section.delegates.some(
-        (d) => d.student_id === user.id,
+        (d: any) => d.student_id === user.id,
       );
 
       if (!isTeacher && !isDelegate) {
@@ -124,7 +128,7 @@ export class BiometricsService {
     }
 
     // 3. Fetch enrolled students and their encrypted biometric templates
-    const enrollments = await this.prisma.enrollment.findMany({
+    const enrollments = await this.db.enrollment.findMany({
       where: { section_id: sectionId },
       include: {
         student: {
@@ -143,8 +147,8 @@ export class BiometricsService {
     });
 
     const studentTemplates = enrollments
-      .filter((e) => e.student.biometric_template !== null)
-      .map((e) => ({
+      .filter((e: any) => e.student && e.student.biometric_template !== null)
+      .map((e: any) => ({
         student_id: e.student.id,
         student_number: e.student.student_number,
         full_name: e.student.user.full_name,
@@ -167,7 +171,7 @@ export class BiometricsService {
   }
 
   async getStudentBiometric(studentId: string, user: any) {
-    const student = await this.prisma.student.findUnique({
+    const student = await this.db.student.findUnique({
       where: { id: studentId },
       include: {
         user: true,
@@ -208,7 +212,7 @@ export class BiometricsService {
       );
     }
 
-    const template = await this.prisma.biometricTemplate.findUnique({
+    const template = await this.db.biometricTemplate.findUnique({
       where: { student_id: studentId },
     });
 
@@ -218,13 +222,13 @@ export class BiometricsService {
       );
     }
 
-    await this.prisma.biometricTemplate.delete({
+    await this.db.biometricTemplate.delete({
       where: { student_id: studentId },
     });
 
     // Record Audit Log
     try {
-      await this.prisma.auditLog.create({
+      await this.db.auditLog.create({
         data: {
           user_id: user.id || user.sub,
           action: 'BIOMETRIC_TEMPLATE_REVOKE',
@@ -236,7 +240,7 @@ export class BiometricsService {
           }),
         },
       });
-    } catch (err) {
+    } catch (err: any) {
       this.logger.warn(`Failed to write audit log: ${err.message}`);
     }
 

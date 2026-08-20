@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { QueryAuditLogDto } from './dto/query-audit-log.dto';
-import { Prisma } from '@prisma/client';
 
 export interface CreateAuditLogParams {
   userId?: string;
@@ -17,6 +16,10 @@ export class AuditService {
   private readonly logger = new Logger(AuditService.name);
 
   constructor(private readonly prisma: PrismaService) {}
+
+  private get db(): any {
+    return this.prisma;
+  }
 
   async logAction(params: CreateAuditLogParams) {
     const { userId, action, entityType, entityId, payload, ipAddress } = params;
@@ -47,7 +50,7 @@ export class AuditService {
     }
 
     try {
-      const log = await this.prisma.auditLog.create({
+      const log = await this.db.auditLog.create({
         data: {
           user_id: userId || null,
           action,
@@ -102,8 +105,8 @@ export class AuditService {
     }
 
     const [total, logs] = await Promise.all([
-      this.prisma.auditLog.count({ where }),
-      this.prisma.auditLog.findMany({
+      this.db.auditLog.count({ where }),
+      this.db.auditLog.findMany({
         where,
         skip,
         take: limit,
@@ -131,7 +134,7 @@ export class AuditService {
   }
 
   async getLogById(id: string) {
-    const log = await this.prisma.auditLog.findUnique({
+    const log = await this.db.auditLog.findUnique({
       where: { id },
       include: {
         user: {
@@ -153,7 +156,7 @@ export class AuditService {
   }
 
   async getEntityLogs(entityType: string, entityId: string) {
-    return this.prisma.auditLog.findMany({
+    return this.db.auditLog.findMany({
       where: {
         entity_type: { equals: entityType, mode: 'insensitive' },
         entity_id: entityId,
@@ -174,15 +177,15 @@ export class AuditService {
 
   async getStatistics() {
     const [totalLogs, todayLogs, actionsSummary] = await Promise.all([
-      this.prisma.auditLog.count(),
-      this.prisma.auditLog.count({
+      this.db.auditLog.count(),
+      this.db.auditLog.count({
         where: {
           timestamp: {
             gte: new Date(new Date().setHours(0, 0, 0, 0)),
           },
         },
       }),
-      this.prisma.auditLog.groupBy({
+      this.db.auditLog.groupBy({
         by: ['action'],
         _count: { action: true },
         orderBy: { _count: { action: 'desc' } },
@@ -193,7 +196,7 @@ export class AuditService {
     return {
       total_logs: totalLogs,
       today_logs: todayLogs,
-      top_actions: actionsSummary.map((item) => ({
+      top_actions: actionsSummary.map((item: any) => ({
         action: item.action,
         count: item._count.action,
       })),
