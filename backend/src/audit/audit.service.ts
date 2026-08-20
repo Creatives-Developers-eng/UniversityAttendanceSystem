@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { QueryAuditLogDto } from './dto/query-audit-log.dto';
+import { Prisma } from '@prisma/client';
 
 export interface CreateAuditLogParams {
   userId?: string;
@@ -57,7 +58,7 @@ export class AuditService {
       });
 
       return log;
-    } catch (error) {
+    } catch (error: any) {
       this.logger.error(`Failed to record audit log: ${error.message}`);
       return null;
     }
@@ -76,7 +77,7 @@ export class AuditService {
 
     const skip = (page - 1) * limit;
 
-    const where: any = {};
+    const where: Prisma.AuditLogWhereInput = {};
 
     if (action) {
       where.action = { contains: action, mode: 'insensitive' };
