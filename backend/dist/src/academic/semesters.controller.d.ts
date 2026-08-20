@@ -5,9 +5,9 @@ export declare class SemestersController {
     constructor(semestersService: SemestersService);
     create(dto: CreateSemesterDto): Promise<{
         id: string;
-        is_active: boolean;
         academic_year_id: string;
         semester_type: import(".prisma/client").$Enums.SemesterType;
+        is_active: boolean;
     }>;
     findAll(academicYearId?: string): Promise<({
         academic_year: {
@@ -19,8 +19,8 @@ export declare class SemestersController {
         };
     } & {
         id: string;
-        is_active: boolean;
         academic_year_id: string;
         semester_type: import(".prisma/client").$Enums.SemesterType;
+        is_active: boolean;
     })[]>;
 }

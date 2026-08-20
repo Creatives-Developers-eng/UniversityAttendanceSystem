@@ -46,6 +46,51 @@ export enum TeacherType {
   BOTH = 'BOTH',
 }
 
+export enum SessionState {
+  Created = 'Created',
+  Opened = 'Opened',
+  Active = 'Active',
+  Closing = 'Closing',
+  Closed = 'Closed',
+  Synced = 'Synced',
+}
+
+export enum AttendanceState {
+  Present = 'Present',
+  Absent = 'Absent',
+  Late = 'Late',
+  Excused = 'Excused',
+}
+
+export enum AttendanceMethod {
+  QR = 'QR',
+  Biometric = 'Biometric',
+  Manual = 'Manual',
+}
+
+export enum RequestState {
+  Received = 'Received',
+  Validating = 'Validating',
+  Accepted = 'Accepted',
+  Rejected = 'Rejected',
+  QueuedForSync = 'QueuedForSync',
+}
+
+export enum QrState {
+  Generated = 'Generated',
+  Active = 'Active',
+  Expired = 'Expired',
+  Invalidated = 'Invalidated',
+}
+
+export enum SyncState {
+  Idle = 'Idle',
+  Preparing = 'Preparing',
+  Syncing = 'Syncing',
+  Success = 'Success',
+  Failed = 'Failed',
+}
+
 @Injectable()
 export class PrismaService
   extends PrismaClient

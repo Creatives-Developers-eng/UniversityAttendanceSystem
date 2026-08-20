@@ -16,8 +16,8 @@ export declare class CoursesService {
             id: string;
             created_at: Date;
             name: string;
-            code: string;
             is_active: boolean;
+            code: string;
         };
     } & {
         id: string;

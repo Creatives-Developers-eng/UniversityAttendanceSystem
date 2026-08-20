@@ -6,6 +6,7 @@ const config_1 = require("@nestjs/config");
 const app_module_1 = require("./app.module");
 const http_exception_filter_1 = require("./common/filters/http-exception.filter");
 const transform_interceptor_1 = require("./common/interceptors/transform.interceptor");
+const logging_interceptor_1 = require("./common/interceptors/logging.interceptor");
 async function bootstrap() {
     const logger = new common_1.Logger('Bootstrap');
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
@@ -21,8 +22,21 @@ async function bootstrap() {
         },
     }));
     app.useGlobalFilters(new http_exception_filter_1.HttpExceptionFilter());
-    app.useGlobalInterceptors(new transform_interceptor_1.TransformInterceptor());
-    app.enableCors();
+    app.useGlobalInterceptors(new logging_interceptor_1.LoggingInterceptor(), new transform_interceptor_1.TransformInterceptor());
+    app.use((req, res, next) => {
+        res.setHeader('X-Content-Type-Options', 'nosniff');
+        res.setHeader('X-Frame-Options', 'DENY');
+        res.setHeader('X-XSS-Protection', '1; mode=block');
+        res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+        res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+        next();
+    });
+    app.enableCors({
+        origin: '*',
+        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'X-Device-Id'],
+        credentials: true,
+    });
     await app.listen(port);
     logger.log(`Server is running on: http://localhost:${port}/api/v1`);
 }

@@ -6,7 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PrismaService = exports.TeacherType = exports.SectionType = exports.SemesterType = exports.CodeState = exports.DeviceState = exports.AccountState = exports.Role = void 0;
+exports.PrismaService = exports.SyncState = exports.QrState = exports.RequestState = exports.AttendanceMethod = exports.AttendanceState = exports.SessionState = exports.TeacherType = exports.SectionType = exports.SemesterType = exports.CodeState = exports.DeviceState = exports.AccountState = exports.Role = void 0;
 const common_1 = require("@nestjs/common");
 const client_1 = require("@prisma/client");
 var Role;
@@ -54,6 +54,51 @@ var TeacherType;
     TeacherType["THEORETICAL_TEACHER"] = "THEORETICAL_TEACHER";
     TeacherType["BOTH"] = "BOTH";
 })(TeacherType || (exports.TeacherType = TeacherType = {}));
+var SessionState;
+(function (SessionState) {
+    SessionState["Created"] = "Created";
+    SessionState["Opened"] = "Opened";
+    SessionState["Active"] = "Active";
+    SessionState["Closing"] = "Closing";
+    SessionState["Closed"] = "Closed";
+    SessionState["Synced"] = "Synced";
+})(SessionState || (exports.SessionState = SessionState = {}));
+var AttendanceState;
+(function (AttendanceState) {
+    AttendanceState["Present"] = "Present";
+    AttendanceState["Absent"] = "Absent";
+    AttendanceState["Late"] = "Late";
+    AttendanceState["Excused"] = "Excused";
+})(AttendanceState || (exports.AttendanceState = AttendanceState = {}));
+var AttendanceMethod;
+(function (AttendanceMethod) {
+    AttendanceMethod["QR"] = "QR";
+    AttendanceMethod["Biometric"] = "Biometric";
+    AttendanceMethod["Manual"] = "Manual";
+})(AttendanceMethod || (exports.AttendanceMethod = AttendanceMethod = {}));
+var RequestState;
+(function (RequestState) {
+    RequestState["Received"] = "Received";
+    RequestState["Validating"] = "Validating";
+    RequestState["Accepted"] = "Accepted";
+    RequestState["Rejected"] = "Rejected";
+    RequestState["QueuedForSync"] = "QueuedForSync";
+})(RequestState || (exports.RequestState = RequestState = {}));
+var QrState;
+(function (QrState) {
+    QrState["Generated"] = "Generated";
+    QrState["Active"] = "Active";
+    QrState["Expired"] = "Expired";
+    QrState["Invalidated"] = "Invalidated";
+})(QrState || (exports.QrState = QrState = {}));
+var SyncState;
+(function (SyncState) {
+    SyncState["Idle"] = "Idle";
+    SyncState["Preparing"] = "Preparing";
+    SyncState["Syncing"] = "Syncing";
+    SyncState["Success"] = "Success";
+    SyncState["Failed"] = "Failed";
+})(SyncState || (exports.SyncState = SyncState = {}));
 let PrismaService = class PrismaService extends client_1.PrismaClient {
     async onModuleInit() {
         await this.$connect();

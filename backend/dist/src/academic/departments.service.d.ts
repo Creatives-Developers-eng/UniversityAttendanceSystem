@@ -8,21 +8,21 @@ export declare class DepartmentsService {
         id: string;
         created_at: Date;
         name: string;
-        code: string;
         is_active: boolean;
+        code: string;
     }>;
     findAll(): Promise<{
         id: string;
         created_at: Date;
         name: string;
-        code: string;
         is_active: boolean;
+        code: string;
     }[]>;
     findById(id: string): Promise<{
         id: string;
         created_at: Date;
         name: string;
-        code: string;
         is_active: boolean;
+        code: string;
     }>;
 }

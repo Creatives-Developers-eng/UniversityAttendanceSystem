@@ -6,9 +6,9 @@ export declare class SemestersService {
     constructor(prisma: PrismaService);
     create(dto: CreateSemesterDto): Promise<{
         id: string;
-        is_active: boolean;
         academic_year_id: string;
         semester_type: import(".prisma/client").$Enums.SemesterType;
+        is_active: boolean;
     }>;
     findAll(academicYearId?: string): Promise<({
         academic_year: {
@@ -20,8 +20,8 @@ export declare class SemestersService {
         };
     } & {
         id: string;
-        is_active: boolean;
         academic_year_id: string;
         semester_type: import(".prisma/client").$Enums.SemesterType;
+        is_active: boolean;
     })[]>;
 }

@@ -22,9 +22,9 @@ export declare class SectionsService {
         };
         semester: {
             id: string;
-            is_active: boolean;
             academic_year_id: string;
             semester_type: import(".prisma/client").$Enums.SemesterType;
+            is_active: boolean;
         };
         course: {
             id: string;
@@ -51,9 +51,9 @@ export declare class SectionsService {
         };
         semester: {
             id: string;
-            is_active: boolean;
             academic_year_id: string;
             semester_type: import(".prisma/client").$Enums.SemesterType;
+            is_active: boolean;
         };
         course: {
             id: string;
