@@ -77,7 +77,7 @@ export class AuditService {
 
     const skip = (page - 1) * limit;
 
-    const where: Prisma.AuditLogWhereInput = {};
+    const where: any = {};
 
     if (action) {
       where.action = { contains: action, mode: 'insensitive' };
