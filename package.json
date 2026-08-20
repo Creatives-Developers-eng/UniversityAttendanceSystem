@@ -1,0 +1,13 @@
+{
+  "name": "university-attendance-system-root",
+  "version": "1.0.0",
+  "description": "University Attendance System Root Workspace",
+  "private": true,
+  "scripts": {
+    "start": "npm --prefix backend run start",
+    "start:dev": "npm --prefix backend run start:dev",
+    "build": "npm --prefix backend run build",
+    "test": "npm --prefix backend run test",
+    "test:e2e": "npm --prefix backend run test:e2e"
+  }
+}
