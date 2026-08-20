@@ -11,6 +11,8 @@ import { SessionsModule } from './sessions/sessions.module';
 import { AttendanceModule } from './attendance/attendance.module';
 import { BiometricsModule } from './students/biometrics/biometrics.module';
 import { AuditModule } from './audit/audit.module';
+import { ReportsModule } from './reports/reports.module';
+import { JustificationsModule } from './justifications/justifications.module';
 
 @Module({
   imports: [
@@ -27,6 +29,8 @@ import { AuditModule } from './audit/audit.module';
     AttendanceModule,
     BiometricsModule,
     AuditModule,
+    ReportsModule,
+    JustificationsModule,
   ],
   controllers: [AppController],
   providers: [],

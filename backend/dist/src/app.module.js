@@ -20,6 +20,8 @@ const sessions_module_1 = require("./sessions/sessions.module");
 const attendance_module_1 = require("./attendance/attendance.module");
 const biometrics_module_1 = require("./students/biometrics/biometrics.module");
 const audit_module_1 = require("./audit/audit.module");
+const reports_module_1 = require("./reports/reports.module");
+const justifications_module_1 = require("./justifications/justifications.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -39,6 +41,8 @@ exports.AppModule = AppModule = __decorate([
             attendance_module_1.AttendanceModule,
             biometrics_module_1.BiometricsModule,
             audit_module_1.AuditModule,
+            reports_module_1.ReportsModule,
+            justifications_module_1.JustificationsModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [],
