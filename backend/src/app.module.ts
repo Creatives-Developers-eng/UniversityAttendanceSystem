@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { DevicesModule } from './devices/devices.module';
 import { AcademicModule } from './academic/academic.module';
 import { SessionsModule } from './sessions/sessions.module';
+import { AttendanceModule } from './attendance/attendance.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { SessionsModule } from './sessions/sessions.module';
     DevicesModule,
     AcademicModule,
     SessionsModule,
+    AttendanceModule,
   ],
   controllers: [AppController],
   providers: [],

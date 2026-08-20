@@ -17,6 +17,7 @@ const auth_module_1 = require("./auth/auth.module");
 const devices_module_1 = require("./devices/devices.module");
 const academic_module_1 = require("./academic/academic.module");
 const sessions_module_1 = require("./sessions/sessions.module");
+const attendance_module_1 = require("./attendance/attendance.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -33,6 +34,7 @@ exports.AppModule = AppModule = __decorate([
             devices_module_1.DevicesModule,
             academic_module_1.AcademicModule,
             sessions_module_1.SessionsModule,
+            attendance_module_1.AttendanceModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [],
