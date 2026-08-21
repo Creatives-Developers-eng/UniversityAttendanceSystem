@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import '../authentication/activation_view.dart';
 import '../shared/tokens/tokens.dart';
+import '../student/views/attendance_history_view.dart';
+import '../student/views/course_details_view.dart';
+import '../student/views/courses_view.dart';
+import '../student/views/student_dashboard_view.dart';
+import '../student/views/student_profile_view.dart';
 
 /// المسارات الرسمية ونظام التوجيه لتطبيق الحضور الجامعي الذكي
 class AppRoutes {
@@ -20,6 +25,9 @@ class AppRoutes {
   static const String attendanceHistory = '/attendance/history';
   static const String profile = '/profile';
   static const String settings = '/settings';
+
+  static const String courses = '/student/courses';
+  static const String courseDetails = '/student/course-details';
 
   /// مولد المسارات والتنقل الآمن (Route Generator)
   static Route<dynamic> onGenerateRoute(RouteSettings routeSettings) {
@@ -53,11 +61,20 @@ class AppRoutes {
 
       case studentDashboard:
         return _buildRoute(
-          const _PlaceholderScreen(
-            title: 'لوحة تحكم الطالب',
-            subtitle: 'استعراض المواد وتسجيل الحضور بالـ QR',
-            icon: Icons.person_rounded,
-          ),
+          const StudentDashboardView(),
+          routeSettings,
+        );
+
+      case courses:
+        return _buildRoute(
+          const CoursesView(),
+          routeSettings,
+        );
+
+      case courseDetails:
+        final courseId = routeSettings.arguments as String? ?? '';
+        return _buildRoute(
+          CourseDetailsView(courseId: courseId),
           routeSettings,
         );
 
@@ -112,22 +129,15 @@ class AppRoutes {
         );
 
       case attendanceHistory:
+        final courseCode = routeSettings.arguments as String?;
         return _buildRoute(
-          const _PlaceholderScreen(
-            title: 'سجل الحضور والغياب',
-            subtitle: 'تفاصيل ونسب الحضور للمقررات المسجلة',
-            icon: Icons.history_rounded,
-          ),
+          AttendanceHistoryView(initialCourseCode: courseCode),
           routeSettings,
         );
 
       case profile:
         return _buildRoute(
-          const _PlaceholderScreen(
-            title: 'الملف الشخصي',
-            subtitle: 'بيانات المستخدم والجهاز الموثق',
-            icon: Icons.account_circle_rounded,
-          ),
+          const StudentProfileView(),
           routeSettings,
         );
 
