@@ -15,6 +15,8 @@ void main() {
       expect(AppRoutes.theoreticalTeacherDashboard, '/theoretical-teacher/dashboard');
       expect(AppRoutes.qrScanner, '/student/qr-scanner');
       expect(AppRoutes.localSession, '/delegate/session');
+      expect(AppRoutes.courses, '/student/courses');
+      expect(AppRoutes.courseDetails, '/student/course-details');
       expect(AppRoutes.attendanceHistory, '/attendance/history');
       expect(AppRoutes.profile, '/profile');
       expect(AppRoutes.settings, '/settings');
@@ -29,6 +31,18 @@ void main() {
 
       final studentRoute = AppRoutes.onGenerateRoute(const RouteSettings(name: AppRoutes.studentDashboard));
       expect(studentRoute, isA<MaterialPageRoute>());
+
+      final coursesRoute = AppRoutes.onGenerateRoute(const RouteSettings(name: AppRoutes.courses));
+      expect(coursesRoute, isA<MaterialPageRoute>());
+
+      final courseDetailsRoute = AppRoutes.onGenerateRoute(const RouteSettings(name: AppRoutes.courseDetails, arguments: 'CS301'));
+      expect(courseDetailsRoute, isA<MaterialPageRoute>());
+
+      final historyRoute = AppRoutes.onGenerateRoute(const RouteSettings(name: AppRoutes.attendanceHistory));
+      expect(historyRoute, isA<MaterialPageRoute>());
+
+      final profileRoute = AppRoutes.onGenerateRoute(const RouteSettings(name: AppRoutes.profile));
+      expect(profileRoute, isA<MaterialPageRoute>());
 
       final notFoundRoute = AppRoutes.onGenerateRoute(const RouteSettings(name: '/unknown-route'));
       expect(notFoundRoute, isA<MaterialPageRoute>());
