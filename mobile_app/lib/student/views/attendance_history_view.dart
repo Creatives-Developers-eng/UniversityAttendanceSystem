@@ -217,9 +217,9 @@ class _AttendanceHistoryViewState extends State<AttendanceHistoryView> {
                     borderRadius: BorderRadius.circular(AppRadius.radiusMD),
                     border: Border.all(color: AppColors.border),
                   ),
-                  child: Column(
+                  child: const Column(
                     children: [
-                      const Icon(Icons.filter_alt_off_rounded, size: 48.0, color: AppColors.textSecondary),
+                      Icon(Icons.filter_alt_off_rounded, size: 48.0, color: AppColors.textSecondary),
                       AppSpacing.gapVerticalMD,
                       Text(
                         'لا توجد سجلات تطابق الفلتر المحدد',

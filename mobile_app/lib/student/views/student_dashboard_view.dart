@@ -38,17 +38,9 @@ class _StudentDashboardViewState extends State<StudentDashboardView> {
   late int _currentIndex;
 
   ScreenStateType _state = ScreenStateType.loading;
-  StudentProfile? _profile;
-  List<StudentCourse> _courses = [];
+  StudentProfile? _profile;\n  List<StudentCourse> _courses = [];
   List<StudentAttendanceRecord> _recentRecords = [];
-  AttendanceStats _stats = const AttendanceStats(
-    totalSessions: 0,
-    totalPresent: 0,
-    totalAbsent: 0,
-    totalLate: 0,
-    totalExcused: 0,
-    totalCourses: 0,
-  );
+  AttendanceStats _stats = const AttendanceStats();
   String? _errorMessage;
 
   @override
@@ -247,7 +239,7 @@ class _StudentDashboardViewState extends State<StudentDashboardView> {
                           borderRadius: BorderRadius.circular(AppRadius.radiusMD),
                           border: Border.all(color: AppColors.border),
                         ),
-                        child: Text(
+                        child: const Text(
                           'لا توجد مقررات مسجلة حالياً.',
                           style: TextStyle(color: AppColors.textSecondary),
                         ),
@@ -311,7 +303,7 @@ class _StudentDashboardViewState extends State<StudentDashboardView> {
                           borderRadius: BorderRadius.circular(AppRadius.radiusMD),
                           border: Border.all(color: AppColors.border),
                         ),
-                        child: Text(
+                        child: const Text(
                           'لا توجد سجلات حضور سابقة.',
                           style: TextStyle(color: AppColors.textSecondary),
                         ),

@@ -43,8 +43,7 @@ class _CoursesViewState extends State<CoursesView> {
 
     try {
       final courses = await _service.getEnrolledCourses();
-      if (!mounted) return;
-
+      if (!mounted) return;\n
       setState(() {
         _allCourses = courses;
         _applyFilters();
@@ -63,15 +62,15 @@ class _CoursesViewState extends State<CoursesView> {
     List<StudentCourse> result = List.from(_allCourses);
 
     if (_selectedFilter == 'PRACTICAL') {
-      result = result.where((c) => c.sectionType == SectionType.practical).toList();
+      result = result.where((c) => c.isPractical).toList();
     } else if (_selectedFilter == 'THEORETICAL') {
-      result = result.where((c) => c.sectionType == SectionType.theoretical).toList();
+      result = result.where((c) => c.isTheoretical).toList();
     }
 
     if (_searchQuery.trim().isNotEmpty) {
       final query = _searchQuery.trim().toLowerCase();
       result = result.where((c) {
-        return c.courseName.toLowerCase().contains(query) ||
+        return c.title.toLowerCase().contains(query) ||
             c.courseCode.toLowerCase().contains(query) ||
             c.teacherName.toLowerCase().contains(query);
       }).toList();
@@ -97,8 +96,7 @@ class _CoursesViewState extends State<CoursesView> {
       ),
       body: AppStateView(
         state: _state,
-        loadingMessage: 'جاري تحميل المقررات المسجلة...',
-        emptyTitle: 'لا توجد مقررات مسجلة',
+        loadingMessage: 'جاري تحميل المقررات المسجلة...',\n        emptyTitle: 'لا توجد مقررات مسجلة',
         emptyMessage: 'لم يتم العثور على أي مقررات مسجلة لك في هذا الفصل الأكاديمي.',
         emptyIcon: Icons.menu_book_rounded,
         errorMessage: _errorMessage,
@@ -153,12 +151,12 @@ class _CoursesViewState extends State<CoursesView> {
                     AppSpacing.gapHorizontalSM,
                     _buildFilterChip(
                       'PRACTICAL',
-                      'شعب عملية (${_allCourses.where((c) => c.sectionType == SectionType.practical).length})',
+                      'شعب عملية (${_allCourses.where((c) => c.isPractical).length})',
                     ),
                     AppSpacing.gapHorizontalSM,
                     _buildFilterChip(
                       'THEORETICAL',
-                      'شعب نظرية (${_allCourses.where((c) => c.sectionType == SectionType.theoretical).length})',
+                      'شعب نظرية (${_allCourses.where((c) => c.isTheoretical).length})',
                     ),
                   ],
                 ),
@@ -174,7 +172,7 @@ class _CoursesViewState extends State<CoursesView> {
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  Text(
+                  const Text(
                     'الفصل الحالي',
                     style: TextStyle(
                       fontSize: 12.0,
@@ -193,9 +191,9 @@ class _CoursesViewState extends State<CoursesView> {
                     borderRadius: BorderRadius.circular(AppRadius.radiusMD),
                     border: Border.all(color: AppColors.border),
                   ),
-                  child: Column(
+                  child: const Column(
                     children: [
-                      const Icon(Icons.search_off_rounded, size: 48.0, color: AppColors.textSecondary),
+                      Icon(Icons.search_off_rounded, size: 48.0, color: AppColors.textSecondary),
                       AppSpacing.gapVerticalMD,
                       Text(
                         'لا توجد مواد مطابقة لمعايير البحث الحالية',

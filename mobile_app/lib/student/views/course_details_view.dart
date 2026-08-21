@@ -49,8 +49,7 @@ class _CourseDetailsViewState extends State<CourseDetailsView> {
         setState(() {
           _state = ScreenStateType.empty;
         });
-        return;
-      }
+        return;\n      }
 
       final records = await _service.getAttendanceHistory(
         courseCode: course.courseCode,
@@ -75,7 +74,7 @@ class _CourseDetailsViewState extends State<CourseDetailsView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(_course?.courseName ?? 'تفاصيل المقرر'),
+        title: Text(_course?.title ?? 'تفاصيل المقرر'),
         actions: [
           IconButton(
             onPressed: _loadCourseDetails,
@@ -132,7 +131,7 @@ class _CourseDetailsViewState extends State<CourseDetailsView> {
                           borderRadius: BorderRadius.circular(AppRadius.radiusMD),
                           border: Border.all(color: AppColors.border),
                         ),
-                        child: Text(
+                        child: const Text(
                           'لم يتم تسجيل أي جلسات حضور لهذه المادة بعد.',
                           style: TextStyle(color: AppColors.textSecondary),
                         ),
@@ -148,7 +147,7 @@ class _CourseDetailsViewState extends State<CourseDetailsView> {
 
   Widget _buildCourseHeader(BuildContext context, StudentCourse course) {
     final theme = Theme.of(context);
-    final isPractical = course.sectionType == SectionType.practical;
+    final isPractical = course.isPractical;
 
     return Container(
       padding: AppSpacing.paddingLG,
@@ -206,7 +205,7 @@ class _CourseDetailsViewState extends State<CourseDetailsView> {
           ),
           AppSpacing.gapVerticalMD,
           Text(
-            course.courseName,
+            course.title,
             style: theme.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.w800,
             ),
@@ -218,7 +217,7 @@ class _CourseDetailsViewState extends State<CourseDetailsView> {
               const SizedBox(width: 6.0),
               Text(
                 'الأستاذ المشرف: ${course.teacherName}',
-                style: TextStyle(color: AppColors.textSecondary, fontSize: 13.0),
+                style: const TextStyle(color: AppColors.textSecondary, fontSize: 13.0),
               ),
             ],
           ),
@@ -229,7 +228,7 @@ class _CourseDetailsViewState extends State<CourseDetailsView> {
               const SizedBox(width: 6.0),
               Text(
                 'الساعات المعتمدة: ${course.creditHours} ساعات',
-                style: TextStyle(color: AppColors.textSecondary, fontSize: 13.0),
+                style: const TextStyle(color: AppColors.textSecondary, fontSize: 13.0),
               ),
             ],
           ),
@@ -285,7 +284,7 @@ class _CourseDetailsViewState extends State<CourseDetailsView> {
           ClipRRect(
             borderRadius: BorderRadius.circular(AppRadius.radiusSM),
             child: LinearProgressIndicator(
-              value: course.totalLectures > 0 ? (rate / 100.0) : 1.0,
+              value: course.totalSessions > 0 ? (rate / 100.0) : 1.0,
               backgroundColor: AppColors.border,
               valueColor: AlwaysStoppedAnimation<Color>(rateColor),
               minHeight: 8.0,
@@ -306,11 +305,11 @@ class _CourseDetailsViewState extends State<CourseDetailsView> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildMetric('إجمالي الجلسات', course.totalLectures.toString(), AppColors.textPrimary),
-              _buildMetric('حضور', course.attendedLectures.toString(), AppColors.success),
-              _buildMetric('غياب', course.absentLectures.toString(), AppColors.error),
-              _buildMetric('تأخير', course.lateLectures.toString(), AppColors.warning),
-              _buildMetric('عذر', course.excusedLectures.toString(), const Color(0xFF0284C7)),
+              _buildMetric('إجمالي الجلسات', course.totalSessions.toString(), AppColors.textPrimary),
+              _buildMetric('حضور', course.attendedSessions.toString(), AppColors.success),
+              _buildMetric('غياب', course.absentSessions.toString(), AppColors.error),
+              _buildMetric('تأخير', course.lateSessions.toString(), AppColors.warning),
+              _buildMetric('عذر', course.excusedSessions.toString(), const Color(0xFF0284C7)),
             ],
           ),
         ],
@@ -323,7 +322,7 @@ class _CourseDetailsViewState extends State<CourseDetailsView> {
       children: [
         Text(
           title,
-          style: TextStyle(fontSize: 11.0, color: AppColors.textSecondary),
+          style: const TextStyle(fontSize: 11.0, color: AppColors.textSecondary),
         ),
         const SizedBox(height: 4.0),
         Text(
