@@ -211,7 +211,7 @@ class AttendanceRateCard extends StatelessWidget {
             const SizedBox(width: 4.0),
             Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 12.0,
                 color: AppColors.textSecondary,
                 fontWeight: FontWeight.w500,

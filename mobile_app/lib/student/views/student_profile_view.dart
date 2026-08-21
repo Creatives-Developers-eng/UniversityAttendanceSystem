@@ -159,11 +159,11 @@ class _StudentProfileViewState extends State<StudentProfileView> {
                         title: 'البريد الجامعي',
                         value: _profile!.email,
                       ),
-                      if (_profile!.phone != null)
+                      if (_profile!.phoneNumber != null)
                         _buildInfoTile(
                           icon: Icons.phone_outlined,
                           title: 'رقم الهاتف',
-                          value: _profile!.phone!,
+                          value: _profile!.phoneNumber!,
                         ),
                     ]),
                     AppSpacing.gapVerticalLG,
@@ -179,7 +179,7 @@ class _StudentProfileViewState extends State<StudentProfileView> {
                       _buildInfoTile(
                         icon: Icons.verified_user_outlined,
                         title: 'حالة الحساب',
-                        value: _profile!.accountState.name,
+                        value: _profile!.accountState,
                         valueColor: AppColors.success,
                       ),
                       _buildInfoTile(
@@ -188,11 +188,11 @@ class _StudentProfileViewState extends State<StudentProfileView> {
                         value: 'موثق ومعتمد (Bound)',
                         valueColor: AppColors.success,
                       ),
-                      if (_profile!.boundDeviceId != null)
+                      if (_profile!.deviceIdentifier != null)
                         _buildInfoTile(
                           icon: Icons.fingerprint_rounded,
                           title: 'معرف الجهاز الرقمي',
-                          value: _profile!.boundDeviceId!,
+                          value: _profile!.deviceIdentifier!,
                         ),
                       if (_profile!.boundAt != null)
                         _buildInfoTile(
@@ -258,7 +258,7 @@ class _StudentProfileViewState extends State<StudentProfileView> {
             flex: 2,
             child: Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 13.0,
                 color: AppColors.textSecondary,
               ),

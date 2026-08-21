@@ -18,7 +18,7 @@ class AttendanceHistoryCard extends StatelessWidget {
 
     // تنسيق التاريخ والوقت باللغة العربية
     final dateStr = DateFormat('yyyy/MM/dd', 'ar').format(record.sessionDate);
-    final timeStr = DateFormat('hh:mm a', 'ar').format(record.verifiedAt ?? record.sessionDate);
+    final timeStr = DateFormat('hh:mm a', 'ar').format(record.markedAt);
 
     // تفاصيل شارة الحالة
     Color stateColor;
@@ -54,7 +54,7 @@ class AttendanceHistoryCard extends StatelessWidget {
 
     // أيقونة طريقة التحضير
     IconData methodIcon;
-    switch (record.verificationMethod.toUpperCase()) {
+    switch (record.attendanceMethod.toUpperCase()) {
       case 'QR':
         methodIcon = Icons.qr_code_2_rounded;
         break;
@@ -104,7 +104,7 @@ class AttendanceHistoryCard extends StatelessWidget {
                     AppSpacing.gapHorizontalSM,
                     Text(
                       'شعبة (${record.sectionNumber})',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 12.0,
                         color: AppColors.textSecondary,
                       ),
@@ -124,7 +124,7 @@ class AttendanceHistoryCard extends StatelessWidget {
                       Icon(stateIcon, size: 13.0, color: stateColor),
                       const SizedBox(width: 4.0),
                       Text(
-                        record.stateArabic,
+                        record.attendanceStateArabic,
                         style: TextStyle(
                           color: stateColor,
                           fontWeight: FontWeight.w700,
@@ -139,7 +139,7 @@ class AttendanceHistoryCard extends StatelessWidget {
             AppSpacing.gapVerticalSM,
             // اسم المقرر
             Text(
-              record.courseName,
+              record.courseTitle,
               style: theme.textTheme.titleSmall?.copyWith(
                 fontWeight: FontWeight.w700,
               ),
@@ -160,7 +160,7 @@ class AttendanceHistoryCard extends StatelessWidget {
                 const SizedBox(width: 4.0),
                 Text(
                   dateStr,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 11.0,
                     color: AppColors.textSecondary,
                   ),
@@ -179,7 +179,7 @@ class AttendanceHistoryCard extends StatelessWidget {
                 const SizedBox(width: 4.0),
                 Text(
                   timeStr,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 11.0,
                     color: AppColors.textSecondary,
                   ),
@@ -192,7 +192,7 @@ class AttendanceHistoryCard extends StatelessWidget {
                     Icon(methodIcon, size: 14.0, color: AppColors.primary),
                     const SizedBox(width: 4.0),
                     Text(
-                      record.methodArabic,
+                      record.attendanceMethodArabic,
                       style: const TextStyle(
                         fontSize: 11.0,
                         color: AppColors.primary,
@@ -204,7 +204,7 @@ class AttendanceHistoryCard extends StatelessWidget {
               ],
             ),
             // المبرر أو الملاحظة إن وجدت
-            if (record.note != null && record.note!.isNotEmpty) ...[
+            if (record.reason != null && record.reason!.isNotEmpty) ...[
               const SizedBox(height: 8.0),
               Container(
                 width: double.infinity,
@@ -220,8 +220,8 @@ class AttendanceHistoryCard extends StatelessWidget {
                     const SizedBox(width: 6.0),
                     Expanded(
                       child: Text(
-                        record.note!,
-                        style: TextStyle(
+                        record.reason!,
+                        style: const TextStyle(
                           fontSize: 11.0,
                           color: AppColors.textSecondary,
                           fontStyle: FontStyle.italic,

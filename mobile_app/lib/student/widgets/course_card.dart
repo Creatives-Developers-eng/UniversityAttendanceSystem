@@ -19,7 +19,7 @@ class CourseCard extends StatelessWidget {
     final rate = course.attendancePercentage;
 
     // ألوان شارة نوع الشعبة
-    final isPractical = course.sectionType == SectionType.practical;
+    final isPractical = course.isPractical;
     final typeBgColor = isPractical
         ? AppColors.secondary.withValues(alpha: 0.12)
         : AppColors.primary.withValues(alpha: 0.1);
@@ -84,7 +84,7 @@ class CourseCard extends StatelessWidget {
                         ),
                         child: Text(
                           '${course.creditHours} ساعات',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 11.0,
                             color: AppColors.textSecondary,
                             fontWeight: FontWeight.w500,
@@ -128,7 +128,7 @@ class CourseCard extends StatelessWidget {
               AppSpacing.gapVerticalSM,
               // عنوان المقرر
               Text(
-                course.courseName,
+                course.title,
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w700,
                   fontSize: 15.0,
@@ -139,7 +139,8 @@ class CourseCard extends StatelessWidget {
               const SizedBox(height: 4.0),
               // اسم الأستاذ
               Row(
-                children: [\n                  const Icon(
+                children: [
+                  const Icon(
                     Icons.school_outlined,
                     size: 14.0,
                     color: AppColors.textSecondary,
@@ -148,7 +149,7 @@ class CourseCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       course.teacherName,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 12.0,
                         color: AppColors.textSecondary,
                       ),
@@ -162,7 +163,7 @@ class CourseCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     'نسبة الحضور:',
                     style: TextStyle(
                       fontSize: 12.0,
@@ -170,7 +171,7 @@ class CourseCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    '${rate.toStringAsFixed(0)}% (${course.attendedLectures}/${course.totalLectures} حضور)',
+                    '${rate.toStringAsFixed(0)}% (${course.attendedSessions}/${course.totalSessions} حضور)',
                     style: TextStyle(
                       fontSize: 12.0,
                       fontWeight: FontWeight.w700,
@@ -183,7 +184,7 @@ class CourseCard extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(AppRadius.radiusSM),
                 child: LinearProgressIndicator(
-                  value: course.totalLectures > 0 ? (rate / 100.0) : 1.0,
+                  value: course.totalSessions > 0 ? (rate / 100.0) : 1.0,
                   backgroundColor: AppColors.border,
                   valueColor: AlwaysStoppedAnimation<Color>(rateColor),
                   minHeight: 6.0,
