@@ -38,6 +38,15 @@ void main() {
       final courseDetailsRoute = AppRoutes.onGenerateRoute(const RouteSettings(name: AppRoutes.courseDetails, arguments: 'CS301'));
       expect(courseDetailsRoute, isA<MaterialPageRoute>());
 
+      final delegateRoute = AppRoutes.onGenerateRoute(const RouteSettings(name: AppRoutes.delegateDashboard));
+      expect(delegateRoute, isA<MaterialPageRoute>());
+
+      final localSessionRoute = AppRoutes.onGenerateRoute(const RouteSettings(name: AppRoutes.localSession));
+      expect(localSessionRoute, isA<MaterialPageRoute>());
+
+      final delegateSheetRoute = AppRoutes.onGenerateRoute(const RouteSettings(name: AppRoutes.delegateAttendanceSheet));
+      expect(delegateSheetRoute, isA<MaterialPageRoute>());
+
       final historyRoute = AppRoutes.onGenerateRoute(const RouteSettings(name: AppRoutes.attendanceHistory));
       expect(historyRoute, isA<MaterialPageRoute>());
 
