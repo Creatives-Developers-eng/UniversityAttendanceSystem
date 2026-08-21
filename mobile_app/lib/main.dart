@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'app/app.dart';
+import 'app/routes.dart';
 
 /// نقطة الانطلاق الرئيسية لتطبيق الهاتف المحمول لنظام الحضور الجامعي الذكي
 void main() async {
@@ -13,6 +14,8 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  // تشغيل التطبيق
-  runApp(const UniversityAttendanceApp());
+  // تشغيل التطبيق (مع فتح لوحة تحكم الطالب كشاشة أولية للمعاينة)
+  runApp(const UniversityAttendanceApp(
+    initialRoute: AppRoutes.studentDashboard,
+  ));
 }
