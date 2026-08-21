@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import '../authentication/activation_view.dart';
+import '../delegate/models/delegate_session.dart';
+import '../delegate/views/delegate_attendance_sheet.dart';
+import '../delegate/views/delegate_dashboard_view.dart';
+import '../delegate/views/live_session_view.dart';
 import '../shared/tokens/tokens.dart';
 import '../student/views/attendance_history_view.dart';
 import '../student/views/course_details_view.dart';
@@ -28,6 +32,7 @@ class AppRoutes {
 
   static const String courses = '/student/courses';
   static const String courseDetails = '/student/course-details';
+  static const String delegateAttendanceSheet = '/delegate/attendance-sheet';
 
   /// مولد المسارات والتنقل الآمن (Route Generator)
   static Route<dynamic> onGenerateRoute(RouteSettings routeSettings) {
@@ -80,10 +85,32 @@ class AppRoutes {
 
       case delegateDashboard:
         return _buildRoute(
-          const _PlaceholderScreen(
-            title: 'لوحة تحكم المندوب',
-            subtitle: 'إدارة الجلسات واستضافة الخادم المحلي',
-            icon: Icons.group_rounded,
+          const DelegateDashboardView(),
+          routeSettings,
+        );
+
+      case localSession:
+        final session = routeSettings.arguments as DelegateSession?;
+        if (session != null) {
+          return _buildRoute(
+            LiveSessionView(session: session),
+            routeSettings,
+          );
+        }
+        return _buildRoute(
+          const DelegateDashboardView(),
+          routeSettings,
+        );
+
+      case delegateAttendanceSheet:
+        final args = routeSettings.arguments as Map<String, dynamic>? ?? {};
+        return _buildRoute(
+          DelegateAttendanceSheet(
+            sectionId: args['sectionId'] as String? ?? 'sec-001-p',
+            sessionId: args['sessionId'] as String?,
+            courseCode: args['courseCode'] as String? ?? 'CS301',
+            courseName: args['courseName'] as String? ?? 'مقرر دراسي',
+            sectionNumber: args['sectionNumber'] as String? ?? '01',
           ),
           routeSettings,
         );
@@ -114,16 +141,6 @@ class AppRoutes {
             title: 'مسح رمز الاستجابة السريعة',
             subtitle: 'وجّه الكاميرا نحو رمز QR الجلسة',
             icon: Icons.qr_code_scanner_rounded,
-          ),
-          routeSettings,
-        );
-
-      case localSession:
-        return _buildRoute(
-          const _PlaceholderScreen(
-            title: 'جلسة الحضور المحلية',
-            subtitle: 'الخادم المحلي قيد التشغيل وبث الـ QR',
-            icon: Icons.wifi_tethering_rounded,
           ),
           routeSettings,
         );
