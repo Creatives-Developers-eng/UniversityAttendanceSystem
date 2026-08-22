@@ -1,6 +1,22 @@
 import 'package:flutter/material.dart';
 import '../authentication/activation_view.dart';
+import '../delegate/models/delegate_session.dart';
+import '../delegate/views/delegate_attendance_sheet.dart';
+import '../delegate/views/delegate_dashboard_view.dart';
+import '../delegate/views/live_session_view.dart';
+import '../practical_teacher/models/lab_group.dart';
+import '../practical_teacher/views/lab_attendance_view.dart';
+import '../practical_teacher/views/lab_groups_view.dart';
+import '../practical_teacher/views/practical_dashboard_view.dart';
 import '../shared/tokens/tokens.dart';
+import '../student/views/attendance_history_view.dart';
+import '../student/views/course_details_view.dart';
+import '../student/views/courses_view.dart';
+import '../student/views/student_dashboard_view.dart';
+import '../student/views/student_profile_view.dart';
+import '../theoretical_teacher/models/theory_course.dart';
+import '../theoretical_teacher/views/theoretical_dashboard_view.dart';
+import '../theoretical_teacher/views/theory_reports_view.dart';
 
 /// المسارات الرسمية ونظام التوجيه لتطبيق الحضور الجامعي الذكي
 class AppRoutes {
@@ -20,6 +36,13 @@ class AppRoutes {
   static const String attendanceHistory = '/attendance/history';
   static const String profile = '/profile';
   static const String settings = '/settings';
+
+  static const String courses = '/student/courses';
+  static const String courseDetails = '/student/course-details';
+  static const String delegateAttendanceSheet = '/delegate/attendance-sheet';
+  static const String labGroups = '/practical-teacher/lab-groups';
+  static const String labAttendance = '/practical-teacher/lab-attendance';
+  static const String theoryReports = '/theoretical-teacher/reports';
 
   /// مولد المسارات والتنقل الآمن (Route Generator)
   static Route<dynamic> onGenerateRoute(RouteSettings routeSettings) {
@@ -53,41 +76,96 @@ class AppRoutes {
 
       case studentDashboard:
         return _buildRoute(
-          const _PlaceholderScreen(
-            title: 'لوحة تحكم الطالب',
-            subtitle: 'استعراض المواد وتسجيل الحضور بالـ QR',
-            icon: Icons.person_rounded,
-          ),
+          const StudentDashboardView(),
+          routeSettings,
+        );
+
+      case courses:
+        return _buildRoute(
+          const CoursesView(),
+          routeSettings,
+        );
+
+      case courseDetails:
+        final courseId = routeSettings.arguments as String? ?? '';
+        return _buildRoute(
+          CourseDetailsView(courseId: courseId),
           routeSettings,
         );
 
       case delegateDashboard:
         return _buildRoute(
-          const _PlaceholderScreen(
-            title: 'لوحة تحكم المندوب',
-            subtitle: 'إدارة الجلسات واستضافة الخادم المحلي',
-            icon: Icons.group_rounded,
+          const DelegateDashboardView(),
+          routeSettings,
+        );
+
+      case localSession:
+        final session = routeSettings.arguments as DelegateSession?;
+        if (session != null) {
+          return _buildRoute(
+            LiveSessionView(session: session),
+            routeSettings,
+          );
+        }
+        return _buildRoute(
+          const DelegateDashboardView(),
+          routeSettings,
+        );
+
+      case delegateAttendanceSheet:
+        final args = routeSettings.arguments as Map<String, dynamic>? ?? {};
+        return _buildRoute(
+          DelegateAttendanceSheet(
+            sectionId: args['sectionId'] as String? ?? 'sec-001-p',
+            sessionId: args['sessionId'] as String?,
+            courseCode: args['courseCode'] as String? ?? 'CS301',
+            courseName: args['courseName'] as String? ?? 'مقرر دراسي',
+            sectionNumber: args['sectionNumber'] as String? ?? '01',
           ),
           routeSettings,
         );
 
       case practicalTeacherDashboard:
         return _buildRoute(
-          const _PlaceholderScreen(
-            title: 'لوحة تحكم الأستاذ العملي',
-            subtitle: 'إدارة الشعب والمعامل والتحضير الميداني',
-            icon: Icons.science_rounded,
-          ),
+          const PracticalDashboardView(),
+          routeSettings,
+        );
+
+      case labGroups:
+        return _buildRoute(
+          const LabGroupsView(),
+          routeSettings,
+        );
+
+      case labAttendance:
+        final group = routeSettings.arguments as LabGroup?;
+        if (group != null) {
+          return _buildRoute(
+            LabAttendanceView(group: group),
+            routeSettings,
+          );
+        }
+        return _buildRoute(
+          const LabGroupsView(),
           routeSettings,
         );
 
       case theoreticalTeacherDashboard:
         return _buildRoute(
-          const _PlaceholderScreen(
-            title: 'لوحة تحكم الأستاذ النظري',
-            subtitle: 'إدارة المحاضرات النظرية واعتماد الغيابات',
-            icon: Icons.menu_book_rounded,
-          ),
+          const TheoreticalDashboardView(),
+          routeSettings,
+        );
+
+      case theoryReports:
+        final course = routeSettings.arguments as TheoryCourse?;
+        if (course != null) {
+          return _buildRoute(
+            TheoryReportsView(course: course),
+            routeSettings,
+          );
+        }
+        return _buildRoute(
+          const TheoreticalDashboardView(),
           routeSettings,
         );
 
@@ -101,33 +179,16 @@ class AppRoutes {
           routeSettings,
         );
 
-      case localSession:
-        return _buildRoute(
-          const _PlaceholderScreen(
-            title: 'جلسة الحضور المحلية',
-            subtitle: 'الخادم المحلي قيد التشغيل وبث الـ QR',
-            icon: Icons.wifi_tethering_rounded,
-          ),
-          routeSettings,
-        );
-
       case attendanceHistory:
+        final courseCode = routeSettings.arguments as String?;
         return _buildRoute(
-          const _PlaceholderScreen(
-            title: 'سجل الحضور والغياب',
-            subtitle: 'تفاصيل ونسب الحضور للمقررات المسجلة',
-            icon: Icons.history_rounded,
-          ),
+          AttendanceHistoryView(initialCourseCode: courseCode),
           routeSettings,
         );
 
       case profile:
         return _buildRoute(
-          const _PlaceholderScreen(
-            title: 'الملف الشخصي',
-            subtitle: 'بيانات المستخدم والجهاز الموثق',
-            icon: Icons.account_circle_rounded,
-          ),
+          const StudentProfileView(),
           routeSettings,
         );
 
